@@ -13,8 +13,6 @@ def add_git(args):
         print(f"File '{name}' added to staging area.")
     else:
         print(f"File '{name}' does not exist in the current directory: {path}. Please check the file name and try again.")
-
-    
 #____________________________________________________________________________
 
 #clone function
@@ -29,9 +27,9 @@ def commit_git(args):
     repo.git.add(A=True)  # Stage all changes
 
     commit_message = input("Enter commit message: ")
-    repo.index.commit(commit_message)
+    massege = repo.index.commit(args)
 
-    print(f"Changes committed with message: '{commit_message}'")
+    print(f"Changes committed with message: '{massege}'")
 # git command error exception
     class GitCommandErrer(Exception):
         pass
@@ -73,16 +71,6 @@ def reset_git(args):
         print("⚠ Not a Git Repo or other error", exce) 
 #____________________________________________________________________________
     #git checkout function
-def checkout_git(args):
-    name = args.file
-    try:
-        repo = Repo(os.getcwd())
-        repo.git.checkout(name)
-        print(f"File '{name}' has been checked out.")
-    except GitCommandError as error:
-        print("🛑Git Error: ", error)
-    except Exception as exce:
-        print("⚠ Not a Git Repo or other error", exce)
 
 #_____________________________________________________________________________
 def main():
@@ -122,12 +110,7 @@ def main():
     reset_parser.add_argument("file", help="reset the staging area")
     reset_parser.set_defaults(func=reset_git)
 # git checkout function
-    checkout_parser = subparsers.add_parser("checkout", help="checkout a file") 
-    checkout_parser.add_argument("file", help="a file to checkout")
-    checkout_parser.set_defaults(func=checkout_git) 
-
-
-    
+ 
     args = parser.parse_args()
     args.func(args)
 
