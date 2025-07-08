@@ -2,6 +2,14 @@ import os
 import argparse
 from git import Repo, GitCommandError
 
+
+# init function
+def init_git(args):
+    path = args.path
+    if not os.path.exists(path):
+        os.makedirs(path)  # Create the directory if it doesn't exist
+    repo = Repo.init(path)
+    print(f"Initialized a new git repository at {path}")
 #add function 
 def add_git(args):
     name = args.name
@@ -71,7 +79,6 @@ def reset_git(args):
         print("⚠ Not a Git Repo or other error", exce) 
 #____________________________________________________________________________
     #git checkout function
-
 #_____________________________________________________________________________
 def main():
     parser = argparse.ArgumentParser( 
@@ -109,7 +116,10 @@ def main():
     reset_parser = subparsers.add_parser("reset", help="reset the staging area")
     reset_parser.add_argument("file", help="reset the staging area")
     reset_parser.set_defaults(func=reset_git)
-# git checkout function
+# git init function
+    init_parser = subparsers.add_parser("init", help="initialize a new git repository")
+    init_parser.add_argument("path", help="path to initialize the git repository")
+    init_parser.set_defaults(func=lambda args: Repo.init(args.path))
  
     args = parser.parse_args()
     args.func(args)
